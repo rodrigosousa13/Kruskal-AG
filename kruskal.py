@@ -69,9 +69,9 @@ def kruskal(G):
 
         if comp_u != comp_v: # se T + (u,v) nao forma ciclo
             uf.union(comp_u, comp_v)
-            arestas[u].append((v, peso))
+            T[u].append((v, peso))
             peso_total += peso
-            
+
     return T
 
 
