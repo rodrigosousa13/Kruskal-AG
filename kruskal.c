@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct _ver {
-    int comp_size;
-    struct _ver *next;
+    int altura;
+    struct _ver *pai;
 } Vertice;
 
 typedef struct {
@@ -11,16 +12,19 @@ typedef struct {
 
 enum {A, B, C, D, E, F, G, NUM_VERTICES};
 
-void acha();
-void une();
-void ordena_arestas(Aresta **arestas);
+#define NUM_ARESTAS 11
+
+Vertice *acha_comp(Vertice *v);
+void une_comp(Vertice *u, Vertice *v);
+void ordena_arestas(Aresta *arestas, int m);
+Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas);
 
 int main() {
     Vertice vertices[NUM_VERTICES];
-    for (int i; i < NUM_VERTICES; i++) {
+    for (int i = 0; i < NUM_VERTICES; i++) {
         vertices[i] = (Vertice){
-            .comp_size = 1,
-            .next = NULL
+            .altura = 1,
+            .pai = NULL
         };
     }
     Aresta arestas[] = {
@@ -36,4 +40,78 @@ int main() {
         {E, G, 9},
         {F, G, 11}
     };
+
+    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, vertices, arestas);
+
+    printf("Arvore Geradora Minima:\n");
+    for (int i = 0; i < NUM_VERTICES - 1; i++) {
+        printf("%d -- %d == %d:\n", AGM[i].from, AGM[i].to, AGM[i].peso);
+    }
+
+    free(AGM);
+    return 0;
+}
+
+Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas) {
+    Aresta *T = malloc((n-1) * sizeof(Aresta));
+    int i = 0, j = 0;
+
+    ordena_arestas(arestas, m);
+
+    for (i = 0; i < m; i++) {
+        int label_u = arestas[i].from;
+        int label_v = arestas[i].to;
+        Vertice *u = &vertices[label_u];
+        Vertice *v = &vertices[label_v];
+
+        if (acha_comp(u) != acha_comp(v)) {
+            une_comp(u, v);
+            T[j] = arestas[i];
+            j++;
+        }
+    }
+
+    return T;
+}
+
+Vertice *acha_comp(Vertice *v) {
+    if (v->pai != NULL)
+        return acha_comp(v->pai);
+    return v;
+}
+
+void une_comp(Vertice *u, Vertice *v) {
+    u = acha_comp(u); 
+    v = acha_comp(v); 
+
+    if (u->altura < v->altura) {
+        u->pai = v;
+    } else if (u->altura > v-> altura) {
+        v->pai = u;
+    } else {
+        v->pai = u;
+        u->altura++;
+    }
+}
+
+void ordena_arestas(Aresta *A, int m) {
+    int i, j, intervalo, trocado = 1;
+    Aresta temp;
+
+	intervalo = m;
+	while (intervalo > 1 || trocado == 1)
+	{
+		intervalo = intervalo * 10 / 13;
+		if (intervalo == 9 || intervalo == 10) intervalo = 11;
+		if (intervalo < 1) intervalo = 1;
+		trocado = 0;
+		for (i = 0, j = intervalo; j < m; i++, j++)
+		{
+			if (A[i].peso > A[j].peso) {
+                temp = A[i];
+                A[i] = A[j];
+                A[j] = temp;
+            }
+		}
+	}
 }
