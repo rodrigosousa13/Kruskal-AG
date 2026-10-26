@@ -1,14 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct _ver {
-    int altura;
-    struct _ver *pai;
-} Vertice;
-
-typedef struct {
-    int from, to, peso;
-} Aresta;
+#include "kruskal.h"
 
 enum {A, B, C, D, E, F, G, NUM_VERTICES};
 static Aresta arestas[] = {
@@ -24,33 +16,6 @@ static Aresta arestas[] = {
         {E, G, 9},
         {F, G, 11}
     };
-
-#define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
-
-Vertice *acha_comp(Vertice *v);
-void une_comp(Vertice *u, Vertice *v);
-void ordena_arestas(Aresta *arestas, int m);
-Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas);
-
-int main() {
-    Vertice vertices[NUM_VERTICES];
-    for (int i = 0; i < NUM_VERTICES; i++) {
-        vertices[i] = (Vertice){
-            .altura = 1,
-            .pai = NULL
-        };
-    }
-
-    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, vertices, arestas);
-
-    printf("Arvore Geradora Minima:\n");
-    for (int i = 0; i < NUM_VERTICES - 1; i++) {
-        printf("%d -- %d == %d:\n", AGM[i].from, AGM[i].to, AGM[i].peso);
-    }
-
-    free(AGM);
-    return 0;
-}
 
 Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas) {
     Aresta *T = malloc((n-1) * sizeof(Aresta));
