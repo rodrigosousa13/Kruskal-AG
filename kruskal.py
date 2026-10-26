@@ -2,51 +2,44 @@ from typing import List
 
 
 class Node:
-    def __init__(self, node, comp_size):
+    def __init__(self, node, altura):
         self.node = node # vertice que nomeia a componente
-        self.size = comp_size # tamanho da componente
-        self.next = None # proximo no da componente
+        self.altura = altura # altura do vertice na arvore da componente
+        self.pai = None # proximo no da componente
 
 class UnionFind:
     def __init__(self):
         self.nodes: List[Node | None] = []
 
-    def get_nodes(self, grafo):
+    def get_nodes(self, grafo: List[List[tuple[int]]]) -> None:
         for node in range(len(grafo)):
             self.nodes.append(Node(node, 1))
 
-    def find_comp(self, node):
+    def find_comp(self, node: int) -> int:
         """Retorna a componente de node
         A componente de um nó será o ultimo Node na lista encadeada"""
         atual = self.nodes[node]
-        while atual.next is not None:
-            atual = atual.next
+        while atual.pai is not None:
+            atual = self.nodes[atual.pai]
         return atual.node       
 
-    def union(self, comp1, comp2):
-        """comp_menor e comp_maior indicam o indice do nó
-           que representa a componente"""
-        size1 = self.nodes[comp1].size
-        size2 = self.nodes[comp2].size
-        if size1 <= size2:
-            self.nodes[comp1].next = comp2
+    def union(self, comp1: int, comp2: int) -> None:
+        """comp1 e comp2 indicam os indices dos nós
+           que representam a componente"""    
+        altura1 = self.nodes[comp1].altura
+        altura2 = self.nodes[comp2].altura
+        if altura1 < altura2:
+            self.nodes[comp1].pai = comp2
+        elif altura1 > altura2:
+            self.nodes[comp2].pai = comp1
         else:
-            self.nodes[comp2].next = comp1
+            self.nodes[comp2].pai = comp1
+            self.nodes[comp1].altura += 1
 
-# indice do vertice (A=0, ..., G=6): [(indice do vizinho, peso), ...]
-grafo_lista = [
-    [(1, 7), (3, 5)],
-    [(0, 7), (2, 8), (3, 9), (4, 7)],
-    [(1, 8), (4, 5)],
-    [(0, 5), (1, 9), (4, 15), (5, 6)],
-    [(1, 7), (2, 5), (3, 15), (5, 8), (6, 9)],
-    [(3, 6), (4, 8), (6, 11)],
-    [(4, 9), (5, 11)],
-]
 
 def kruskal(G):
     """Retorna a Arvore Geradora Minima"""
-    T = [[]] * len(G)
+    T = [[] for _ in range(len(G))]
     arestas = [] # (u, v, peso)
     for i in range(len(G)): # para cada nó i
         for e in G[i]: # para cada aresta que sai do nó i
@@ -72,6 +65,27 @@ def kruskal(G):
             T[u].append((v, peso))
             peso_total += peso
 
-    return T
+    return T, peso_total
+
+
+if __name__ == "__main__":
+    # indice do vertice (A=0, ..., G=6): [(indice do vizinho, peso), ...]
+    grafo_lista = [
+        [(1, 7), (3, 5)],
+        [(0, 7), (2, 8), (3, 9), (4, 7)],
+        [(1, 8), (4, 5)],
+        [(0, 5), (1, 9), (4, 15), (5, 6)],
+        [(1, 7), (2, 5), (3, 15), (5, 8), (6, 9)],
+        [(3, 6), (4, 8), (6, 11)],
+        [(4, 9), (5, 11)],
+    ]
+
+    letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    agm, peso_total = kruskal(grafo_lista)
+    print("Arestas da Árvore Geradora Mínima:")
+    for node in range(len(agm)):
+        for aresta in agm[node]:
+            print(f"{letras[node]} -- {letras[aresta[0]]} (peso {aresta[1]})")
+    print(f"Peso total da AGM: {peso_total}")
 
 
