@@ -11,8 +11,21 @@ typedef struct {
 } Aresta;
 
 enum {A, B, C, D, E, F, G, NUM_VERTICES};
+static Aresta arestas[] = {
+        {A, B, 7},
+        {A, D, 5},
+        {B, C, 8},
+        {B, D, 9},
+        {B, E, 7},
+        {C, E, 5},
+        {D, E, 15},
+        {D, F, 6},
+        {E, F, 8},
+        {E, G, 9},
+        {F, G, 11}
+    };
 
-#define NUM_ARESTAS 11
+#define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
 
 Vertice *acha_comp(Vertice *v);
 void une_comp(Vertice *u, Vertice *v);
@@ -27,19 +40,6 @@ int main() {
             .pai = NULL
         };
     }
-    Aresta arestas[] = {
-        {A, B, 7},
-        {A, D, 5},
-        {B, C, 8},
-        {B, D, 9},
-        {B, E, 7},
-        {C, E, 5},
-        {D, E, 15},
-        {D, F, 6},
-        {E, F, 8},
-        {E, G, 9},
-        {F, G, 11}
-    };
 
     Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, vertices, arestas);
 
@@ -69,6 +69,9 @@ Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas) {
             T[j] = arestas[i];
             j++;
         }
+
+        if (j >= n - 1) // j vai de 0 a n-2 (n-1 arestas)
+            return T;
     }
 
     return T;
@@ -95,6 +98,7 @@ void une_comp(Vertice *u, Vertice *v) {
 }
 
 void ordena_arestas(Aresta *A, int m) {
+    /* usa comb sort pra ordenar as arestas */
     int i, j, intervalo, trocado = 1;
     Aresta temp;
 
