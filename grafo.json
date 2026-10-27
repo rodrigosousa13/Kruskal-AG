@@ -1,0 +1,1 @@
+{"directed":false,"multigraph":false,"graph":{},"nodes":[{"id":"A"},{"id":"B"},{"id":"C"},{"id":"D"},{"id":"E"},{"id":"F"},{"id":"G"}],"links":[{"weight":5,"source":"C","target":"E"},{"weight":5,"source":"A","target":"D"},{"weight":6,"source":"D","target":"F"},{"weight":7,"source":"A","target":"B"},{"weight":7,"source":"B","target":"E"},{"weight":9,"source":"E","target":"G"}]}

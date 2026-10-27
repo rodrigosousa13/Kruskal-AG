@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <cjson/cJSON.h>
 
 #define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
 
@@ -21,6 +22,6 @@ Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas);
 Vertice *acha_comp(Vertice *v);
 void une_comp(Vertice *u, Vertice *v);
 void ordena_arestas(Aresta *A, int m);
-
+void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas);
 
 #endif

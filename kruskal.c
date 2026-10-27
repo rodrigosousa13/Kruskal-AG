@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "kruskal.h"
+#include <cjson/cJSON.h>
 
 enum {A, B, C, D, E, F, G, NUM_VERTICES};
 static Aresta arestas[] = {
@@ -83,4 +84,47 @@ void ordena_arestas(Aresta *A, int m) {
             }
 		}
 	}
+}
+
+
+void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas) {
+    const char *nomes[] = {"A", "B", "C", "D", "E", "F", "G"};
+
+    cJSON *json = cJSON_CreateObject();
+    if (json == NULL) {
+        printf("erro ao criar objeto JSON\n");
+        return;
+    }
+
+    cJSON_AddBoolToObject(json, "directed", false);
+    cJSON_AddBoolToObject(json, "multigraph", false);
+    cJSON_AddItemToObject(json, "graph", cJSON_CreateObject());
+
+    /* vertices */
+    cJSON *nodes = cJSON_AddArrayToObject(json, "nodes");
+    for (int i = 0; i < num_vertices; i++) {
+        cJSON *node = cJSON_CreateObject();
+        cJSON_AddStringToObject(node, "id", nomes[i]);
+        cJSON_AddItemToArray(nodes, node);
+    }
+
+    /* arestas */
+    cJSON *links = cJSON_AddArrayToObject(json, "links");
+    for (int i = 0; i < num_arestas; i++) {
+        cJSON *link = cJSON_CreateObject();
+        cJSON_AddNumberToObject(link, "weight", arestas[i].peso);
+        cJSON_AddStringToObject(link, "source", nomes[arestas[i].from]);
+        cJSON_AddStringToObject(link, "target", nomes[arestas[i].to]);
+        cJSON_AddItemToArray(links, link);
+    }
+
+    /* escrita no arquivo */
+    char *texto = cJSON_PrintUnformatted(json);
+    if (texto != NULL) {
+        printf("%s\n", texto);
+        fputs(texto, f);
+        free(texto);
+    }
+
+    cJSON_Delete(json);
 }
