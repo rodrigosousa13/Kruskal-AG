@@ -16,23 +16,14 @@ static Aresta arestas[] = {
         {E, G, 9},
         {F, G, 11}
     };
-
+#define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
 
 int main() {
-    Vertice vertices[NUM_VERTICES];
-    for (int i = 0; i < NUM_VERTICES; i++) {
-        vertices[i] = (Vertice){
-            .altura = 1,
-            .pai = NULL
-        };
-    }
-
-    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, vertices, arestas);
+    int qtd; // quantidade de arestas da AGM retornada
+    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, arestas, &qtd);
 
     printf("Arvore Geradora Minima:\n");
-    for (int i = 0; i < NUM_VERTICES - 1; i++) {
-        printf("%d -- %d == %d:\n", AGM[i].from, AGM[i].to, AGM[i].peso);
-    }
+    print_arestas(AGM, qtd);
 
     free(AGM);
     return 0;
