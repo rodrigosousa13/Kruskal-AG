@@ -17,8 +17,7 @@ typedef struct {
     int from, to, peso;
 } Aresta;
 
-
-Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas);
+Aresta *kruskal(int n, int m, Aresta *arestas, int *qtd);
 Vertice *acha_comp(Vertice *v);
 void une_comp(Vertice *u, Vertice *v);
 void ordena_arestas(Aresta *A, int m);

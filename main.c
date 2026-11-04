@@ -16,7 +16,7 @@ static Aresta arestas[] = {
         {E, G, 9},
         {F, G, 11}
     };
-
+#define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
 
 int main() {
 

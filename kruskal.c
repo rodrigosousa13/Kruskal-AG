@@ -3,23 +3,9 @@
 #include "kruskal.h"
 #include <cjson/cJSON.h>
 
-enum {A, B, C, D, E, F, G, NUM_VERTICES};
-static Aresta arestas[] = {
-        {A, B, 7},
-        {A, D, 5},
-        {B, C, 8},
-        {B, D, 9},
-        {B, E, 7},
-        {C, E, 5},
-        {D, E, 15},
-        {D, F, 6},
-        {E, F, 8},
-        {E, G, 9},
-        {F, G, 11}
-    };
-
-Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas) {
+Aresta *kruskal(int n, int m, Aresta *arestas, int *qtd) {
     Aresta *T = malloc((n-1) * sizeof(Aresta));
+    Vertice *vertices = constroi_set(n);
     int i = 0, j = 0;
 
     ordena_arestas(arestas, m);
@@ -37,9 +23,10 @@ Aresta *kruskal(int n, int m, Vertice vertices[], Aresta *arestas) {
         }
 
         if (j >= n - 1) // j vai de 0 a n-2 (n-1 arestas)
-            return T;
+            break;
     }
-
+    free(vertices);
+    *qtd = j;
     return T;
 }
 
@@ -61,6 +48,18 @@ void une_comp(Vertice *u, Vertice *v) {
         v->pai = u;
         u->altura++;
     }
+}
+
+Vertice *constroi_set(int n) {
+    Vertice *vertices = malloc(n * sizeof(Vertice));
+    for (int i = 0; i < n; i++) {
+        vertices[i] = (Vertice){
+            .altura = 1,
+            .pai = NULL
+        };
+    }
+
+    return vertices;
 }
 
 void ordena_arestas(Aresta *A, int m) {
