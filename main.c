@@ -19,11 +19,34 @@ static Aresta arestas[] = {
 #define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
 
 int main() {
-    int qtd; // quantidade de arestas da AGM retornada
-    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, arestas, &qtd);
+
+    Vertice vertices[NUM_VERTICES];
+    for (int i = 0; i < NUM_VERTICES; i++) {
+        vertices[i] = (Vertice){
+            .altura = 1,
+            .pai = NULL
+        };
+    }
+
+    Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, vertices, arestas);
 
     printf("Arvore Geradora Minima:\n");
-    print_arestas(AGM, qtd);
+    for (int i = 0; i < NUM_VERTICES - 1; i++) {
+        printf("%d -- %d == %d:\n", AGM[i].from, AGM[i].to, AGM[i].peso);
+    }
+    
+
+    FILE *arquivo = fopen("grafo.json", "w");
+    
+    if (arquivo == NULL) {
+        printf("Nao foi possivel criar o arquivouivo grafo.json");
+        return 1;
+    }
+    
+    exporta_grafo(arquivo, AGM, NUM_VERTICES, NUM_VERTICES - 1);
+
+
+    fclose(arquivo);
 
     free(AGM);
     return 0;
