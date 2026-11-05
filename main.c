@@ -29,7 +29,7 @@ int main() {
     FILE *arquivo = fopen("grafo.json", "w");
     
     if (arquivo == NULL) {
-        printf("Nao foi possivel criar o arquivouivo grafo.json");
+        printf("Nao foi possivel criar o arquivo grafo.json");
         return 1;
     }
     
