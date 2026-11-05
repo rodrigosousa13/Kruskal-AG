@@ -17,7 +17,5 @@ void une_comp(Vertice *u, Vertice *v);
 void ordena_arestas(Aresta *A, int m);
 void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas);
 void print_arestas(Aresta *arestas, int m);
-Vertice *constroi_set(int n);
-void print_arestas(Aresta *arestas, int m);
 
 #endif
