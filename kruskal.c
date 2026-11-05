@@ -89,3 +89,48 @@ void print_arestas(Aresta *arestas, int m) {
         printf("%c -- %c (peso %d):\n", arestas[i].from+65, arestas[i].to+65, arestas[i].peso);
     }
 }
+
+void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas) {
+    cJSON *json = cJSON_CreateObject();
+    if (json == NULL) {
+        printf("erro ao criar objeto JSON\n");
+        return;
+    }
+
+    cJSON_AddBoolToObject(json, "directed", false);
+    cJSON_AddBoolToObject(json, "multigraph", false);
+    cJSON_AddItemToObject(json, "graph", cJSON_CreateObject());
+
+    /* vertices */
+    cJSON *nodes = cJSON_AddArrayToObject(json, "nodes");
+    for (int i = 0; i < num_vertices; i++) {
+    char nome[2] = { 'A' + i, '\0' };   
+    cJSON *node = cJSON_CreateObject();
+    cJSON_AddStringToObject(node, "id", nome);
+    cJSON_AddItemToArray(nodes, node);
+    }
+
+    /* arestas */
+    cJSON *links = cJSON_AddArrayToObject(json, "links");
+    for (int i = 0; i < num_arestas; i++) {
+        char src[2] = { 'A' + arestas[i].from, '\0' };
+        char dst[2] = { 'A' + arestas[i].to,   '\0' };
+        cJSON *link = cJSON_CreateObject();
+        cJSON_AddNumberToObject(link, "weight", arestas[i].peso);
+        cJSON_AddStringToObject(link, "source", src);
+        cJSON_AddStringToObject(link, "target", dst);
+        cJSON_AddItemToArray(links, link);
+    }
+
+
+    /* escrita no arquivo */
+    char *texto = cJSON_PrintUnformatted(json);
+    if (texto != NULL) {
+        printf("%s\n", texto);
+        fputs(texto, f);
+        free(texto);
+    }
+
+    cJSON_Delete(json);
+    }
+}

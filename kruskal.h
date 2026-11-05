@@ -12,8 +12,11 @@ typedef struct {
 
 Aresta *kruskal(int n, int m, Aresta *arestas, int *qtd);
 Vertice *acha_comp(Vertice *v);
+Vertice *constroi_set(int n);
 void une_comp(Vertice *u, Vertice *v);
 void ordena_arestas(Aresta *A, int m);
+void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas);
+void print_arestas(Aresta *arestas, int m);
 Vertice *constroi_set(int n);
 void print_arestas(Aresta *arestas, int m);
 
