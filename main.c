@@ -23,19 +23,17 @@ int main() {
     int qtd; // quantidade de arestas da AGM retornada
     Aresta *AGM = kruskal(NUM_VERTICES, NUM_ARESTAS, arestas, &qtd);
 
+    FILE *f1 = fopen("grafo.json", "w");
+    exporta_grafo(f1, arestas, NUM_VERTICES, NUM_ARESTAS);
+    fclose(f1);
+        
     printf("Arvore Geradora Minima:\n");
     print_arestas(AGM, qtd);
+    
+    FILE *f2 = fopen("agm.json", "w");
+    exporta_grafo(f2, AGM, NUM_VERTICES, qtd);
+    fclose(f2);
 
-    FILE *arquivo = fopen("grafo.json", "w");
-    
-    if (arquivo == NULL) {
-        printf("Nao foi possivel criar o arquivouivo grafo.json");
-        return 1;
-    }
-    
-    exporta_grafo(arquivo, AGM, NUM_VERTICES, qtd);
-    
-    fclose(arquivo);
     free(AGM);
     return 0;
 }
