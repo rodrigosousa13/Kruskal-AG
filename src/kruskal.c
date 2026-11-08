@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "kruskal.h"
-#include <cjson/cJSON.h>
-
+#include "cJSON.h"
 
 Aresta *kruskal(int n, int m, Aresta *arestas, int *qtd) {
     Aresta *T = malloc((n-1) * sizeof(Aresta));
@@ -128,7 +127,7 @@ void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas) 
     /* escrita no arquivo */
     char *texto = cJSON_PrintUnformatted(json);
     if (texto != NULL) {
-        printf("%s\n", texto);
+        // printf("%s\n", texto);
         fputs(texto, f);
         free(texto);
     }

@@ -1,6 +1,13 @@
 #ifndef kruskal_h
 #define kruskal_h
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "cJSON.h"
+
+#define NUM_ARESTAS (int) sizeof(arestas) / sizeof(Aresta)
+
+
 typedef struct _ver {
     int altura;
     struct _ver *pai;
