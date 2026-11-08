@@ -54,7 +54,7 @@ Vertice *constroi_set(int n) {
     Vertice *vertices = malloc(n * sizeof(Vertice));
     for (int i = 0; i < n; i++) {
         vertices[i] = (Vertice){
-            .altura = 1,
+            .altura = 0,
             .pai = NULL
         };
     }
@@ -87,7 +87,7 @@ void ordena_arestas(Aresta *A, int m) {
 
 void print_arestas(Aresta *arestas, int m) {
     for (int i = 0; i < m; i++) {
-        printf("%c -- %c (peso %d):\n", arestas[i].from+65, arestas[i].to+65, arestas[i].peso);
+        printf("%c -- %c (peso: %d)\n", arestas[i].from+65, arestas[i].to+65, arestas[i].peso);
     }
 }
 
@@ -105,10 +105,10 @@ void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas) 
     /* vertices */
     cJSON *nodes = cJSON_AddArrayToObject(json, "nodes");
     for (int i = 0; i < num_vertices; i++) {
-    char nome[2] = { 'A' + i, '\0' };   
-    cJSON *node = cJSON_CreateObject();
-    cJSON_AddStringToObject(node, "id", nome);
-    cJSON_AddItemToArray(nodes, node);
+        char nome[2] = { 'A' + i, '\0' };   
+        cJSON *node = cJSON_CreateObject();
+        cJSON_AddStringToObject(node, "id", nome);
+        cJSON_AddItemToArray(nodes, node);
     }
 
     /* arestas */
@@ -133,4 +133,5 @@ void exporta_grafo(FILE *f, Aresta *arestas, int num_vertices, int num_arestas) 
     }
 
     cJSON_Delete(json);
-    }
+}
+
